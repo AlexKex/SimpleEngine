@@ -1,13 +1,49 @@
 <?php
 namespace core;
 
+use core\exception\ApplicationException;
+
 class Application {
-    function __construct(array $configuration = [])
-    {
-        echo "Hello, I'm simple engine!";
+    use Singleton;
+
+    private $router;
+
+    public function run(){
+        $this->router = new Router();
+
+        $class = "\\" . $this->router->getPackage() . "\\" . $this->router->getController();
+        $method = "action" . ucfirst($this->router->getAction());
+
+        if(class_exists($class)){
+            $controller = new $class;
+
+            if(method_exists($controller, $method)){
+                $controller->$method();
+            }
+            else{
+                throw new ApplicationException("Method " . $class . " not found", 0503);
+            }
+        }
+        else{
+            throw new ApplicationException("Class " . $class . " not found", 0502);
+        }
+
+
     }
 
-    function run(){
+    public function setConfiguration(array $configuration){
+        if(empty($this->configuration))
+            $this->configuration = $configuration;
+        else
+            throw new ApplicationException("Configuration has been already set up", 0501);
+    }
 
+    public function get(string $parameterName){
+        $value = NULL;
+
+        if(key_exists($parameterName, $this->configuration))
+            $value = $this->configuration[$parameterName];
+
+        return $value;
     }
 }

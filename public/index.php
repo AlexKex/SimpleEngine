@@ -8,7 +8,12 @@ require(__DIR__ . "/../configuration/main.config.php");
 
 // Стартуем приложение
 try {
-    (new core\Application($configuration))->run();
+    $app = core\Application::instance();
+    $app->setConfiguration($configuration);
+    $app->run();
+}
+catch (\core\exception\ApplicationException $e){
+    echo "Inner app exception ".$e->getCode()." ".$e->getMessage();
 }
 catch (Exception $e){
     echo $e->getMessage();
