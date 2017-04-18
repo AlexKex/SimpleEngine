@@ -1,9 +1,11 @@
 <?php
+$configuration = [];
+
 // Настройки окружения
-define("ENVIRONMENT", "PROD");
+$configuration["ENVIRONMENT"] = "PROD";
 
 // Настройки БД
-define("DB_HOST", "");
-define("DB_USER", "");
-define("DB_PASS", "");
-define("DB_NAME", "");
+$configuration["DB"]["DB_HOST"] = ""; // сервер БД
+$configuration["DB"]["DB_USER"] = ""; // логин
+$configuration["DB"]["DB_PASS"] = ""; // пароль
+$configuration["DB"]["DB_NAME"] = ""; // имя БД
