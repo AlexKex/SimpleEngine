@@ -13,6 +13,6 @@ class DefaultController extends AbstractController
 {
     public function actionIndex()
     {
-        echo "Main page";
+        echo $this->render("index");
     }
 }

@@ -4,6 +4,9 @@ $configuration = [];
 // Настройки окружения
 $configuration["ENVIRONMENT"] = "PROD";
 
+// настройки директорий
+$configuration["DIR"]["VIEWS"] = $_SERVER["DOCUMENT_ROOT"]."/../views/";
+
 // Настройки БД
 $configuration["DB"]["DB_HOST"] = ""; // сервер БД
 $configuration["DB"]["DB_USER"] = ""; // логин

@@ -4,6 +4,7 @@ require (__DIR__ . "/../vendor/autoload.php");
 require (__DIR__ . "/../core/autoload.php");
 
 // Подключаем конфигурацию
+$configuration = [];
 require(__DIR__ . "/../configuration/main.config.php");
 
 // Стартуем приложение
@@ -16,5 +17,7 @@ catch (\core\exception\ApplicationException $e){
     echo "Inner app exception ".$e->getCode()." ".$e->getMessage();
 }
 catch (Exception $e){
-    echo $e->getMessage();
+    $msg = $e->getMessage()."<br>";
+    $msg .= "<pre>" . $e->getTraceAsString() . "</pre>";
+    echo $msg;
 }

@@ -125,7 +125,7 @@ class Router
             $this->controller = "DefaultController";
         }
 
-        if($this->package == "" && isset($commandParts[0]) && $commandParts != ""){
+        if($this->package == "" && isset($commandParts[0]) && $commandParts[0] != ""){
             $this->package = $commandParts[0];
         }
         else{

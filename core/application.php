@@ -1,12 +1,14 @@
 <?php
 namespace core;
 
+use controllers\AbstractController;
 use core\exception\ApplicationException;
 
 class Application {
     use Singleton;
 
     private $router;
+    private $configuration = [];
 
     public function run(){
         $this->router = new Router();
@@ -16,6 +18,7 @@ class Application {
 
         if(class_exists($class)){
             $controller = new $class;
+            $controller->setRequestedAction($this->router->getAction());
 
             if(method_exists($controller, $method)){
                 $controller->$method();
@@ -45,5 +48,9 @@ class Application {
             $value = $this->configuration[$parameterName];
 
         return $value;
+    }
+
+    public function router() : Router{
+        return $this->router;
     }
 }
