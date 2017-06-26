@@ -6,7 +6,7 @@
  * Time: 13:54
  */
 
-namespace core\exception;
+namespace simpleengine\core\exception;
 
 
 class ApplicationException extends \Exception

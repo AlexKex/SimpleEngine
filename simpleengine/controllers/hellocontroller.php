@@ -6,7 +6,7 @@
  * Time: 17:37
  */
 
-namespace controllers;
+namespace simpleengine\controllers;
 
 
 class HelloController extends AbstractController
@@ -15,5 +15,6 @@ class HelloController extends AbstractController
     public function actionIndex()
     {
         // TODO: Implement actionIndex() method.
+        echo __CLASS__;
     }
 }

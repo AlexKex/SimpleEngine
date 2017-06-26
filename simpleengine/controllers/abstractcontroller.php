@@ -6,11 +6,11 @@
  * Time: 13:36
  */
 
-namespace controllers;
+namespace simpleengine\controllers;
 
 
-use core\Application;
-use core\exception\ApplicationException;
+use simpleengine\core\Application;
+use simpleengine\core\exception\ApplicationException;
 
 abstract class AbstractController
 {
@@ -18,7 +18,7 @@ abstract class AbstractController
 
     abstract public function actionIndex();
 
-    protected function render(string $template = "") : string{
+    protected function render(string $template = "", array $variables = []) : string{
         if($template == "")
             $template = $this->requestedAction;
 
@@ -33,7 +33,7 @@ abstract class AbstractController
             throw new ApplicationException("Template " . $dir . $template . " not found", 0504);
         }
 
-        return $twig->render($template.".tmpl");
+        return $twig->render($template.".tmpl", $variables);
     }
 
     public function setRequestedAction(string $actionName){

@@ -1,8 +1,7 @@
 <?php
-namespace core;
+namespace simpleengine\core;
 
-use controllers\AbstractController;
-use core\exception\ApplicationException;
+use simpleengine\core\exception\ApplicationException;
 
 class Application {
     use Singleton;
@@ -13,7 +12,7 @@ class Application {
     public function run(){
         $this->router = new Router();
 
-        $class = "\\" . $this->router->getPackage() . "\\" . $this->router->getController();
+        $class = "\\simpleengine\\" . $this->router->getPackage() . "\\" . $this->router->getController();
         $method = "action" . ucfirst($this->router->getAction());
 
         if(class_exists($class)){

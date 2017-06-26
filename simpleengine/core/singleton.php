@@ -6,7 +6,7 @@
  * Time: 13:49
  */
 
-namespace core;
+namespace simpleengine\core;
 
 trait Singleton {
     static private $instance = null;

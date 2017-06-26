@@ -5,7 +5,7 @@ $configuration = [];
 $configuration["ENVIRONMENT"] = "PROD";
 
 // настройки директорий
-$configuration["DIR"]["VIEWS"] = $_SERVER["DOCUMENT_ROOT"]."/../views/";
+$configuration["DIR"]["VIEWS"] = $_SERVER["DOCUMENT_ROOT"]."/../simpleengine/views/";
 
 // Настройки БД
 $configuration["DB"]["DB_HOST"] = ""; // сервер БД
@@ -19,3 +19,5 @@ $configuration["ROUTER"] = [
     "hello/<action>" => "controllers/HelloController/<action>",
     "<controller>/<action>" => "<controller>/<action>"
 ];
+
+

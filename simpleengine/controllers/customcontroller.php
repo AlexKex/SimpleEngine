@@ -6,7 +6,7 @@
  * Time: 13:33
  */
 
-namespace controllers;
+namespace simpleengine\controllers;
 
 class CustomController extends AbstractController
 {
