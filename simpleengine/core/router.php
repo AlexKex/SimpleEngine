@@ -90,18 +90,19 @@ class Router
         if(preg_match("/</", $activeRule["pattern"])) {
             foreach (explode("/", $activeRule["pattern"]) as $partKey => $patternPart) {
                 if (preg_match("/</", $patternPart)) {
-                    $command = str_replace($patternPart, $urlParts[$partKey], $command);
+                    $replacer = (isset($urlParts[$partKey]) ? $urlParts[$partKey] : "");
+                    $command = str_replace($patternPart, $replacer, $command);
 
                     if (preg_match("/action/", $patternPart)) {
-                        $this->action = $urlParts[$partKey];
+                        $this->action = $replacer;
                     }
 
                     if (preg_match("/controller/", $patternPart)) {
-                        $this->controller = $urlParts[$partKey];
+                        $this->controller = $replacer;
                     }
 
                     if (preg_match("/package/", $patternPart)) {
-                        $this->package = $urlParts[$partKey];
+                        $this->package = $replacer;
                     }
                 }
             }
