@@ -109,26 +109,24 @@ class Router
 
         $commandParts = explode("/", $command);
 
-
         if($this->action == "" && isset($commandParts[2]) && $commandParts[2] != ""){
             $this->action = $commandParts[2];
         }
-        else{
+        else if($this->action == ""){
             $this->action = "index";
         }
-
 
         if($this->controller == "" && isset($commandParts[1]) && $commandParts[1] != ""){
             $this->controller = $commandParts[1];
         }
-        else{
+        else if($this->controller == ""){
             $this->controller = "DefaultController";
         }
 
         if($this->package == "" && isset($commandParts[0]) && $commandParts[0] != ""){
             $this->package = $commandParts[0];
         }
-        else{
+        else if($this->package == ""){
             $this->package = "controllers";
         }
     }
