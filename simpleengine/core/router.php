@@ -90,18 +90,19 @@ class Router
         if(preg_match("/</", $activeRule["pattern"])) {
             foreach (explode("/", $activeRule["pattern"]) as $partKey => $patternPart) {
                 if (preg_match("/</", $patternPart)) {
-                    $command = str_replace($patternPart, $urlParts[$partKey], $command);
+                    $replacer = (isset($urlParts[$partKey]) ? $urlParts[$partKey] : "");
+                    $command = str_replace($patternPart, $replacer, $command);
 
                     if (preg_match("/action/", $patternPart)) {
-                        $this->action = $urlParts[$partKey];
+                        $this->action = $replacer;
                     }
 
                     if (preg_match("/controller/", $patternPart)) {
-                        $this->controller = $urlParts[$partKey];
+                        $this->controller = $replacer;
                     }
 
                     if (preg_match("/package/", $patternPart)) {
-                        $this->package = $urlParts[$partKey];
+                        $this->package = $replacer;
                     }
                 }
             }
@@ -109,26 +110,24 @@ class Router
 
         $commandParts = explode("/", $command);
 
-
         if($this->action == "" && isset($commandParts[2]) && $commandParts[2] != ""){
             $this->action = $commandParts[2];
         }
-        else{
+        else if($this->action == ""){
             $this->action = "index";
         }
-
 
         if($this->controller == "" && isset($commandParts[1]) && $commandParts[1] != ""){
             $this->controller = $commandParts[1];
         }
-        else{
+        else if($this->controller == ""){
             $this->controller = "DefaultController";
         }
 
         if($this->package == "" && isset($commandParts[0]) && $commandParts[0] != ""){
             $this->package = $commandParts[0];
         }
-        else{
+        else if($this->package == ""){
             $this->package = "controllers";
         }
     }
