@@ -7,7 +7,7 @@ class AppTest extends \PHPUnit\Framework\TestCase{
     protected $app;
 
     protected function setUp(){
-        // Подключаем конфигурацию
+        // РџРѕРґРєР»СЋС‡Р°РµРј РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ
         $configuration = [];
         require(__DIR__ . "/../configuration/main.config.php");
 

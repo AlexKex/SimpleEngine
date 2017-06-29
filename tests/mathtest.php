@@ -5,9 +5,9 @@ class MathTest extends \PHPUnit\Framework\TestCase
 {
     public function providerFactorial(){
         return [
-          [0, 1],
-          [2, 2],
-          [5, 120]
+            [0, 1],
+            [2, 2],
+            [5, 120]
         ];
     }
 
