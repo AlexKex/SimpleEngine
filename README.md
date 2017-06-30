@@ -10,4 +10,4 @@ Simple MVC Engine for my students
 1. Clone or download sources 
 (e.g. run command `git clone https://github.com/AlexKex/SimpleEngine .`)
 2. Deploy them in the host folder
-3. Run "composer install"
+3. Run `composer install`
