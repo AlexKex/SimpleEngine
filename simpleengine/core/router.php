@@ -6,6 +6,8 @@ class Router
     private $package = "";
     private $controller = "";
     private $action = "";
+    private $parameter = "";
+
     public function __construct()
     {
         $urlParts = explode("?", $_SERVER["REQUEST_URI"]);
@@ -84,6 +86,10 @@ class Router
                     if (preg_match("/package/", $patternPart)) {
                         $this->package = $replacer;
                     }
+
+                    if (preg_match("/parameter/", $patternPart)) {
+                        $this->parameter = $replacer;
+                    }
                 }
             }
         }
@@ -106,5 +112,20 @@ class Router
         else if($this->package == ""){
             $this->package = "controllers";
         }
+
+        if($this->parameter == "" && isset($commandParts[3]) && $commandParts[3] != ""){
+            $this->parameter = $commandParts[3];
+        }
+        else if($this->package == ""){
+            $this->parameter = "parameter";
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getParameter()
+    {
+        return $this->parameter;
     }
 }
