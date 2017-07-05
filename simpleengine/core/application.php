@@ -13,7 +13,7 @@ class Application {
         $this->router = new Router();
 
         $class = "\\simpleengine\\" . $this->router->getPackage() . "\\" . $this->router->getController();
-        $method = "action" . ucfirst($this->router->getAction());
+        $method = $this->router->getAction();
 
         if(class_exists($class)){
             $controller = new $class;
@@ -23,7 +23,7 @@ class Application {
                 $controller->$method();
             }
             else{
-                throw new ApplicationException("Method " . $class . " not found", 0503);
+                throw new ApplicationException("Method " . $method . " not found in " . $class, 0503);
             }
         }
         else{

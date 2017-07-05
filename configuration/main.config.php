@@ -17,7 +17,7 @@ $configuration["DB"]["DB_NAME"] = ""; // имя БД
 $configuration["ROUTER"] = [
     "customController/<action>" => "controllers/CustomController/<action>",
     "hello/<action>" => "controllers/HelloController/<action>",
-    "<controller>/<action>" => "<controller>/<action>"
+    "<controller>/<action>" => "controllers/<controller>/<action>"
 ];
 
 

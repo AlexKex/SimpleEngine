@@ -3,7 +3,7 @@ namespace simpleengine\core;
 class Router
 {
     private $urlData = [];
-    private $package = "";
+    private $package = "controllers";
     private $controller = "";
     private $action = "";
     public function __construct()
@@ -28,83 +28,132 @@ class Router
      * Метод разборки URL
      */
     private function applyUrlMapping(){
+        // если адрес есть
         if(!empty($this->urlData["main"])){
+            // получаем правила роутинга
             $rules = Application::instance()->get("ROUTER");
+
+            // здесь будет храниться выбранное правило
             $activeRule = [];
-            foreach($rules as $ruleSource => $ruleTarget){
-                // превращаем правило в регулярное выражение
+
+            // перебираем правила, чтобы найти подходящее
+            foreach($rules as $ruleSource => $ruleTarget) {
+                // разбиваем правило на сегменты адреса
                 $ruleData = explode("/", $ruleSource);
-                $pcre = "/\/";
+
+                // формируем регулярное выражение
+                $pcre = '/\/';
+
+                // анализируем сегменты правила
                 foreach($ruleData as $rulePart){
                     if(mb_substr($rulePart, 0, 1, "UTF-8") != '<'){
                         // если это фиксированная часть
-                        $pcre .= $rulePart."\/";
+                        $pcre .= $rulePart.'\/';
                     }
                     else{
-                        // это шаблон
-                        $pcre .= "([a-z0-9-]+\/)*";
+                        // если это placeholder
+                        $pcre .= '([a-z0-9-]+\/)*';
                     }
                 }
-                $pcre .= "/";
+
+                $pcre .= '/';
+
+                // проверяем, подходит ли вызванный адрес текущей регулярке
                 if(preg_match($pcre, $this->urlData["main"])){
                     $activeRule['pattern'] = $ruleSource;
                     $activeRule['controller'] = $ruleTarget;
+                    $activeRule['url'] = $this->urlData["main"];
                     break;
                 }
             }
+
+            // если правило сформировано, то вызываем нужный контроллер
             if(!empty($activeRule)){
                 $this->setUpRouting($activeRule);
             }
+            // иначе всегда кидаем на главную
+            else{
+                $this->setUpRouting(
+                    [
+                        "pattern" => "controllers/DefaultController/index",
+                        "controller" => "controllers/DefaultController/index",
+                        "url" => $this->urlData["main"]
+                    ]
+                );
+            }
         }
     }
+
     /**
      * Метод назначения управляющих конструкций, исходя из URL
+     * Назначаем пакет, контроллер, действие и параметры
      * @param $activeRule
      */
-    private function setUpRouting($activeRule){
-        $command = $activeRule["controller"];
-        $urlPartsTmp = array_filter(explode("/", $this->urlData["main"]));
+    private function setUpRouting(array $activeRule){
+        // разбираем URL на соответствующие шаблону части
         $urlParts = [];
-        foreach($urlPartsTmp as $item){
+        foreach(array_filter(explode("/", $activeRule['url'])) as $item){
             if(!empty($item))
                 $urlParts[] = $item;
         }
-        // если правило - это шаблон
+
+        // если правило содержит плейсхолдеры
         if(preg_match("/</", $activeRule["pattern"])) {
+            // анализируем шаблон адреса
             foreach (explode("/", $activeRule["pattern"]) as $partKey => $patternPart) {
+                $replacer = (isset($urlParts[$partKey]) ? $urlParts[$partKey] : "");
+
+                // если часть - плейсхолдер
                 if (preg_match("/</", $patternPart)) {
-                    $replacer = (isset($urlParts[$partKey]) ? $urlParts[$partKey] : "");
-                    $command = str_replace($patternPart, $replacer, $command);
                     if (preg_match("/action/", $patternPart)) {
-                        $this->action = $replacer;
+                        if($replacer != "")
+                            $this->action = "action".ucfirst($replacer);
+                        else
+                            $this->action = "actionIndex";
+
                     }
                     if (preg_match("/controller/", $patternPart)) {
-                        $this->controller = $replacer;
+                        if($replacer != "")
+                            $this->controller = ucfirst($replacer)."Controller";
+                        else
+                            $this->controller = "DefaultController";
                     }
-                    if (preg_match("/package/", $patternPart)) {
-                        $this->package = $replacer;
+                    if (preg_match("/parameter/", $patternPart)) {
+                        $this->parameter = $replacer;
                     }
                 }
             }
         }
+
+        $command = $activeRule['controller'];
         $commandParts = explode("/", $command);
-        if($this->action == "" && isset($commandParts[2]) && $commandParts[2] != ""){
-            $this->action = $commandParts[2];
-        }
-        else if($this->action == ""){
-            $this->action = "index";
-        }
-        if($this->controller == "" && isset($commandParts[1]) && $commandParts[1] != ""){
-            $this->controller = $commandParts[1];
-        }
-        else if($this->controller == ""){
-            $this->controller = "DefaultController";
-        }
-        if($this->package == "" && isset($commandParts[0]) && $commandParts[0] != ""){
+
+        if(isset($commandParts[0]) && $commandParts[0] != "")
             $this->package = $commandParts[0];
+
+        // если не задан controller
+        if($this->controller == ""){
+            if(isset($commandParts[1])){
+                if($commandParts[1] != ""){
+                    $this->controller = $commandParts[1];
+                }
+                else{
+                    $this->controller = ucfirst($commandParts[1])."Controller";
+                }
+            }
+            else{
+                $this->controller = "DefaultController";
+            }
         }
-        else if($this->package == ""){
-            $this->package = "controllers";
+
+        // если не задан action
+        if($this->action == ""){
+            if(isset($commandParts[2]) && $commandParts[2] != ""){
+                $this->action = "action".ucfirst($commandParts[2]);
+            }
+            else{
+                $this->action = "actionIndex";
+            }
         }
     }
 }

@@ -22,4 +22,8 @@ class DefaultController extends AbstractController
             "info" => $model->testMethod()
         ]);
     }
+
+    public function actionDefault(){
+        echo 345;
+    }
 }
