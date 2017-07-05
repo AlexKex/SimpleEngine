@@ -15,6 +15,9 @@ trait Singleton {
     private function __clone() { }  // Защищаем от создания через клонирование
     private function __wakeup() { }  // Защищаем от создания через unserialize
 
+    /**
+     * @return self
+     */
     static public function instance() {
         return
             self::$instance===null
