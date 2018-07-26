@@ -11,3 +11,5 @@ Simple MVC Engine for my students
 (e.g. run command `git clone https://github.com/AlexKex/SimpleEngine .`)
 2. Deploy them in the host folder
 3. Run `composer install`
+
+Your web-server should use folder "public" as the root directory
